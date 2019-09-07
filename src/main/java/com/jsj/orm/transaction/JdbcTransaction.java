@@ -1,6 +1,5 @@
 package com.jsj.orm.transaction;
 
-import org.apache.ibatis.transaction.TransactionException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -72,7 +71,7 @@ public class JdbcTransaction implements Transaction {
         } catch (SQLException e) {
             // Only a very poorly implemented driver would fail here,
             // and there's not much we can do about that.
-            throw new TransactionException("Error configuring AutoCommit.  "
+            log.error("Error configuring AutoCommit.  "
                     + "Your driver may not support getAutoCommit() or setAutoCommit(). "
                     + "Requested setting: " + desiredAutoCommit + ".  Cause: " + e, e);
         }
