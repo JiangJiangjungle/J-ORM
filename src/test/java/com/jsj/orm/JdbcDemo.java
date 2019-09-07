@@ -21,7 +21,7 @@ public class JdbcDemo {
         UserMapper userMapper = new UserMapper(druidDataSource, false);
         String userName = userMapper.selectName(1L);
         System.out.println(userName);
-        userMapper.update("jsj", 1L);
+        userMapper.update("jjj", 1L);
         UserDO userDO = userMapper.selectOne(1L);
         if (userDO != null) {
             System.out.println(userDO);

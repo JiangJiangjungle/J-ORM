@@ -1,5 +1,6 @@
 package com.jsj.orm.mapper;
 
+import com.jsj.orm.exception.MapperClosedException;
 import com.jsj.orm.executor.BaseExecutor;
 import com.jsj.orm.executor.Executor;
 import com.jsj.orm.transaction.DefaultTransactionFactory;
@@ -17,7 +18,8 @@ public abstract class BaseMapper {
     private DefaultTransactionFactory transactionFactory = new DefaultTransactionFactory();
     private DataSource dataSource;
     private boolean autoCommit;
-    private Executor executor;
+    private Executor executor = null;
+    private boolean closed = false;
 
     public BaseMapper(DataSource dataSource, boolean autoCommit) {
         this.dataSource = dataSource;
@@ -56,7 +58,7 @@ public abstract class BaseMapper {
             executor.commit();
         } catch (SQLException s) {
         } finally {
-            executor = null;
+            closed = true;
         }
     }
 
@@ -66,11 +68,14 @@ public abstract class BaseMapper {
             executor.rollback();
         } catch (SQLException s) {
         } finally {
-            executor = null;
+            closed = true;
         }
     }
 
     private void checkExecutor() {
+        if (closed) {
+            throw new MapperClosedException("This Mapper has been closed!");
+        }
         if (executor == null) {
             Transaction transaction = transactionFactory.newTransaction(dataSource, autoCommit);
             executor = new BaseExecutor(transaction);
