@@ -3,6 +3,11 @@ package com.jsj.orm.transaction;
 import java.sql.Connection;
 import java.sql.SQLException;
 
+/**
+ * Copy from Mybatis
+ *
+ * @author jiangshenjie
+ */
 public interface Transaction {
     /**
      * Retrieve inner database connection
