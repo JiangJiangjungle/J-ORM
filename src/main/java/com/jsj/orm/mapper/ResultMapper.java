@@ -3,7 +3,7 @@ package com.jsj.orm.mapper;
 import java.util.Map;
 
 /**
- * database数据-> TO的映射
+ * database数据-> PO的映射
  *
  * @param <E>
  * @author jiangshenjie
