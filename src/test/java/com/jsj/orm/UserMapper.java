@@ -1,5 +1,6 @@
 package com.jsj.orm;
 
+import com.jsj.orm.map.BasicResultMapHandler;
 import com.jsj.orm.map.DefaultResultMapHandler;
 import com.jsj.orm.map.ResultMap;
 import com.jsj.orm.map.ResultMapHandler;
@@ -50,7 +51,7 @@ public class UserMapper extends BaseMapper {
     }
 
     public String selectName(Long id) {
-        return selectOne(selectName, (results) -> (String) results.get("user_name"), id);
+        return selectOne(selectName, new BasicResultMapHandler<>(String.class, "user_name"), id);
     }
 
     public void createTableIfNotExists() {
