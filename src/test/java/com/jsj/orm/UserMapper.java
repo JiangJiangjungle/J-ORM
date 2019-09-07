@@ -1,13 +1,13 @@
 package com.jsj.orm;
 
 import com.jsj.orm.mapper.BaseMapper;
+import com.jsj.orm.mapper.ResultMapper;
 
 import javax.sql.DataSource;
 import java.util.Date;
-import java.util.List;
 import java.util.Map;
 
-public class UserMapper extends BaseMapper<UserDO> {
+public class UserMapper extends BaseMapper implements ResultMapper<UserDO> {
     private final String createTable = "CREATE TABLE `tb_user` (\n" +
             "  `id` bigint(20) NOT NULL AUTO_INCREMENT COMMENT 'ID',\n" +
             "  `user_name` varchar(50) NOT NULL COMMENT '用户名',\n" +
@@ -16,7 +16,9 @@ public class UserMapper extends BaseMapper<UserDO> {
             "  PRIMARY KEY (`id`)\n" +
             ") ENGINE=InnoDB AUTO_INCREMENT=63 DEFAULT CHARSET=utf8;";
 
-    private final String selectAll = "select * from `tb_user` where id =?";
+    private final String selectOne = "select * from `tb_user` where id =?";
+
+    private final String selectName = "select user_name from `tb_user` where id =?";
 
     private final String updateUserDO = "update `tb_user` set user_name=? where id =?";
 
@@ -50,16 +52,19 @@ public class UserMapper extends BaseMapper<UserDO> {
         return userDO;
     }
 
-    @Override
     public void createTableIfNotExists() {
         update(createTable);
     }
 
-    public List<UserDO> selectAll(Long id) {
-        return selectList(selectAll, id);
+    public UserDO selectOne(Long id) {
+        return selectOne(selectOne, this, id);
     }
 
     public boolean update(String userName, Long id) {
         return update(updateUserDO, userName, id);
+    }
+
+    public String selectName(Long id) {
+        return selectOne(selectName, (results) -> (String) results.get("user_name"), id);
     }
 }

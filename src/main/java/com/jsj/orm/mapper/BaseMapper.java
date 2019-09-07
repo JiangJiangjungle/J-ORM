@@ -11,10 +11,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * @param <E>
  * @author jiangshenjie
  */
-public abstract class BaseMapper<E> implements ResultMapper<E> {
+public abstract class BaseMapper {
     private DefaultTransactionFactory transactionFactory = new DefaultTransactionFactory();
     private DataSource dataSource;
     private boolean autoCommit;
@@ -25,18 +24,18 @@ public abstract class BaseMapper<E> implements ResultMapper<E> {
         this.autoCommit = autoCommit;
     }
 
-    protected List<E> selectList(String sql, Object... params) {
+    protected <E> List<E> selectList(String sql, ResultMapper<E> resultMapper, Object... params) {
         checkExecutor();
         try {
-            return executor.query(sql, this, params);
+            return executor.query(sql, resultMapper, params);
         } catch (SQLException s) {
             s.printStackTrace();
         }
         return new ArrayList<>(0);
     }
 
-    protected E selectOne(String sql, Object... params) {
-        List<E> result = selectList(sql, params);
+    protected <E> E selectOne(String sql, ResultMapper<E> resultMapper, Object... params) {
+        List<E> result = selectList(sql, resultMapper, params);
         return result.size() > 0 ? result.get(0) : null;
     }
 
@@ -77,6 +76,4 @@ public abstract class BaseMapper<E> implements ResultMapper<E> {
             executor = new BaseExecutor(transaction);
         }
     }
-
-    public abstract void createTableIfNotExists();
 }
