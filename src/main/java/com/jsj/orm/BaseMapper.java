@@ -1,8 +1,9 @@
-package com.jsj.orm.mapper;
+package com.jsj.orm;
 
 import com.jsj.orm.exception.MapperClosedException;
 import com.jsj.orm.executor.BaseExecutor;
 import com.jsj.orm.executor.Executor;
+import com.jsj.orm.map.ResultMapHandler;
 import com.jsj.orm.transaction.DefaultTransactionFactory;
 import com.jsj.orm.transaction.Transaction;
 
@@ -14,7 +15,7 @@ import java.util.List;
 /**
  * @author jiangshenjie
  */
-public abstract class BaseMapper {
+public abstract class BaseMapper implements Mapper {
     private DefaultTransactionFactory transactionFactory = new DefaultTransactionFactory();
     private DataSource dataSource;
     private boolean autoCommit;
@@ -26,22 +27,25 @@ public abstract class BaseMapper {
         this.autoCommit = autoCommit;
     }
 
-    protected <E> List<E> selectList(String sql, ResultMapper<E> resultMapper, Object... params) {
+    @Override
+    public <E> List<E> selectList(String sql, ResultMapHandler<E> resultMapHandler, Object... params) {
         checkExecutor();
         try {
-            return executor.query(sql, resultMapper, params);
+            return executor.query(sql, resultMapHandler, params);
         } catch (SQLException s) {
             s.printStackTrace();
         }
         return new ArrayList<>(0);
     }
 
-    protected <E> E selectOne(String sql, ResultMapper<E> resultMapper, Object... params) {
-        List<E> result = selectList(sql, resultMapper, params);
+    @Override
+    public <E> E selectOne(String sql, ResultMapHandler<E> resultMapHandler, Object... params) {
+        List<E> result = selectList(sql, resultMapHandler, params);
         return result.size() > 0 ? result.get(0) : null;
     }
 
-    protected boolean update(String sql, Object... params) {
+    @Override
+    public boolean update(String sql, Object... params) {
         checkExecutor();
         boolean updated = false;
         try {
@@ -52,6 +56,7 @@ public abstract class BaseMapper {
         return updated;
     }
 
+    @Override
     public void commit() {
         if (executor == null) return;
         try {
@@ -62,6 +67,7 @@ public abstract class BaseMapper {
         }
     }
 
+    @Override
     public void rollback() {
         if (executor == null) return;
         try {

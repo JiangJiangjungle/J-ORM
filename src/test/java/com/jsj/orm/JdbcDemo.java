@@ -1,6 +1,7 @@
 package com.jsj.orm;
 
 import com.alibaba.druid.pool.DruidDataSourceFactory;
+import org.junit.Test;
 
 import javax.sql.DataSource;
 import java.util.Properties;
@@ -11,21 +12,44 @@ import java.util.Properties;
  * @author jiangshenjie
  */
 public class JdbcDemo {
-    public static void main(String[] args) throws Exception {
+    private DataSource getDataSource() throws Exception {
         Properties properties = new Properties();
         properties.put("driverClassName", "com.mysql.cj.jdbc.Driver");
-        properties.put("url", "jdbc:mysql://119.23.204.78:3306/sec_kill?useUnicode=true&characterEncoding=utf8&useSSL=false");
+        properties.put("url", "jdbc:mysql://119.23.204.78:3306/test2?useUnicode=true&characterEncoding=utf8&useSSL=false");
         properties.put("username", "root");
         properties.put("password", "123456");
-        DataSource druidDataSource = DruidDataSourceFactory.createDataSource(properties);
-        UserMapper userMapper = new UserMapper(druidDataSource, false);
+        return DruidDataSourceFactory.createDataSource(properties);
+    }
+
+    @Test
+    public void createTable() throws Exception {
+        DataSource dataSource = getDataSource();
+        UserMapper userMapper = new UserMapper(dataSource, true);
+        userMapper.createTableIfNotExists();
+    }
+
+    @Test
+    public void selectName() throws Exception {
+        DataSource dataSource = getDataSource();
+        UserMapper userMapper = new UserMapper(dataSource, true);
         String userName = userMapper.selectName(1L);
         System.out.println(userName);
-        userMapper.update("jjj", 1L);
+    }
+
+    @Test
+    public void selectOne() throws Exception {
+        DataSource dataSource = getDataSource();
+        UserMapper userMapper = new UserMapper(dataSource, true);
         UserDO userDO = userMapper.selectOne(1L);
-        if (userDO != null) {
-            System.out.println(userDO);
-        }
-        userMapper.commit();
+        System.out.println(userDO);
+    }
+
+    @Test
+    public void update() throws Exception {
+        DataSource dataSource = getDataSource();
+        UserMapper userMapper = new UserMapper(dataSource, true);
+        userMapper.update("tom_" + System.currentTimeMillis(), 1L);
+        System.out.println("---------select-----------");
+        selectOne();
     }
 }

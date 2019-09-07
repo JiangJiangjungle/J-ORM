@@ -5,6 +5,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.util.Date;
 
 /**
@@ -29,6 +30,10 @@ public class UserDO implements Serializable {
      * 手机号码
      */
     private String phone;
+    /**
+     * 现金
+     */
+    private BigDecimal balance;
     /**
      * 创建时间
      */

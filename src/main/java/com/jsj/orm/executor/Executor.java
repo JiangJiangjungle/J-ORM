@@ -1,6 +1,6 @@
 package com.jsj.orm.executor;
 
-import com.jsj.orm.mapper.ResultMapper;
+import com.jsj.orm.map.ResultMapHandler;
 
 import java.sql.SQLException;
 import java.util.List;
@@ -13,13 +13,13 @@ public interface Executor {
      * query
      *
      * @param sql
-     * @param resultMapper
+     * @param resultMapHandler
      * @param params
      * @param <E>
      * @return
      * @throws SQLException
      */
-    <E> List<E> query(String sql, ResultMapper<E> resultMapper, Object... params) throws SQLException;
+    <E> List<E> query(String sql, ResultMapHandler<E> resultMapHandler, Object... params) throws SQLException;
 
     /**
      * update

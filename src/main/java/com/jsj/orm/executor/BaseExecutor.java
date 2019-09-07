@@ -1,6 +1,6 @@
 package com.jsj.orm.executor;
 
-import com.jsj.orm.mapper.ResultMapper;
+import com.jsj.orm.map.ResultMapHandler;
 import com.jsj.orm.transaction.Transaction;
 
 import java.sql.*;
@@ -22,7 +22,7 @@ public class BaseExecutor implements Executor {
     }
 
     @Override
-    public <E> List<E> query(String sql, ResultMapper<E> resultMapper, Object... params) throws SQLException {
+    public <E> List<E> query(String sql, ResultMapHandler<E> resultMapHandler, Object... params) throws SQLException {
         PreparedStatement statement = null;
         try {
             statement = prepare(sql, params);
@@ -34,7 +34,7 @@ public class BaseExecutor implements Executor {
                 for (int i = 1; i <= count; i++) {
                     values.put(data.getColumnName(i), resultSet.getObject(i));
                 }
-                list.add(resultMapper.mapper(values));
+                list.add(resultMapHandler.mapper(values));
             }
             return list;
         } finally {

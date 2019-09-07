@@ -1,4 +1,4 @@
-package com.jsj.orm.mapper;
+package com.jsj.orm.map;
 
 import java.util.Map;
 
@@ -8,7 +8,7 @@ import java.util.Map;
  * @param <E>
  * @author jiangshenjie
  */
-public interface ResultMapper<E> {
+public interface ResultMapHandler<E> {
     /**
      * 映射处理 key为数据表的字段名，value为字段值
      *
