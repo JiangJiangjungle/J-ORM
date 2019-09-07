@@ -1,7 +1,8 @@
 package com.jsj.orm;
 
-import java.sql.Connection;
-import java.sql.SQLException;
+import com.jsj.orm.mapper.BaseMapper;
+
+import javax.sql.DataSource;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -15,46 +16,50 @@ public class UserMapper extends BaseMapper<UserDO> {
             "  PRIMARY KEY (`id`)\n" +
             ") ENGINE=InnoDB AUTO_INCREMENT=63 DEFAULT CHARSET=utf8;";
 
-    private final String selectAll = "select * from " + tableName + " where id =?";
+    private final String selectAll = "select * from `tb_user` where id =?";
 
-    public UserMapper(String tableName) {
-        super(tableName);
+    private final String updateUserDO = "update `tb_user` set user_name=? where id =?";
+
+    public UserMapper(DataSource dataSource) {
+        this(dataSource, true);
     }
 
-    public List<UserDO> selectAll(Connection connection, Long id) {
-        try {
-            return selectList(connection, selectAll, id);
-        } catch (SQLException s) {
-            s.printStackTrace();
-        }
-        return null;
-    }
-
-
-    @Override
-    public void createTableIfNotExists(Connection connection) throws SQLException {
-        execute(connection, createTable);
+    public UserMapper(DataSource dataSource, boolean autoCommit) {
+        super(dataSource, autoCommit);
     }
 
     @Override
-    protected UserDO mapper(Map<String, Object> values) {
+    public UserDO mapper(Map<String, Object> results) {
         UserDO userDO = new UserDO();
-        Object value = values.get("id");
+        Object value = results.get("id");
         if (value != null) {
             userDO.setId((Long) value);
         }
-        value = values.get("user_name");
+        value = results.get("user_name");
         if (value != null) {
             userDO.setUserName((String) value);
         }
-        value = values.get("phone");
+        value = results.get("phone");
         if (value != null) {
             userDO.setPhone((String) value);
         }
-        value = values.get("create_time");
+        value = results.get("create_time");
         if (value != null) {
             userDO.setCreateTime((Date) value);
         }
         return userDO;
+    }
+
+    @Override
+    public void createTableIfNotExists() {
+        update(createTable);
+    }
+
+    public List<UserDO> selectAll(Long id) {
+        return selectList(selectAll, id);
+    }
+
+    public boolean update(String userName, Long id) {
+        return update(updateUserDO, userName, id);
     }
 }

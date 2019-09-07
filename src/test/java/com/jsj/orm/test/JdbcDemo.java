@@ -1,12 +1,10 @@
 package com.jsj.orm.test;
 
 import com.alibaba.druid.pool.DruidDataSourceFactory;
-import com.jsj.orm.MapperRegistry;
 import com.jsj.orm.UserDO;
 import com.jsj.orm.UserMapper;
 
 import javax.sql.DataSource;
-import java.sql.Connection;
 import java.util.List;
 import java.util.Properties;
 
@@ -24,14 +22,12 @@ public class JdbcDemo {
         properties.put("username", "root");
         properties.put("password", "123456");
         DataSource druidDataSource = DruidDataSourceFactory.createDataSource(properties);
-        MapperRegistry.init();
-        MapperRegistry.getInstance().register(new UserMapper("tb_user"));
-        UserMapper userDAO = MapperRegistry.getInstance().getDAO(UserMapper.class);
-        try (Connection connection = druidDataSource.getConnection()) {
-            List<UserDO> userDOS = userDAO.selectAll(connection, 1L);
-            for (UserDO userDO : userDOS) {
-                System.out.println(userDO);
-            }
+        UserMapper userMapper = new UserMapper(druidDataSource, false);
+        userMapper.update("666", 1L);
+        List<UserDO> userDOS = userMapper.selectAll(1L);
+        for (UserDO userDO : userDOS) {
+            System.out.println(userDO);
         }
+        userMapper.commit();
     }
 }
