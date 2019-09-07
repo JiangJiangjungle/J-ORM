@@ -13,9 +13,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
+ * 可以直接使用，也可以通过继承BaseMapper进行使用
+ *
  * @author jiangshenjie
  */
-public abstract class BaseMapper implements Mapper {
+public class BaseMapper implements Mapper {
     private DefaultTransactionFactory transactionFactory = new DefaultTransactionFactory();
     private DataSource dataSource;
     private boolean autoCommit;
@@ -58,7 +60,9 @@ public abstract class BaseMapper implements Mapper {
 
     @Override
     public void commit() {
-        if (executor == null) return;
+        if (executor == null) {
+            return;
+        }
         try {
             executor.commit();
         } catch (SQLException s) {
@@ -69,7 +73,9 @@ public abstract class BaseMapper implements Mapper {
 
     @Override
     public void rollback() {
-        if (executor == null) return;
+        if (executor == null) {
+            return;
+        }
         try {
             executor.rollback();
         } catch (SQLException s) {
