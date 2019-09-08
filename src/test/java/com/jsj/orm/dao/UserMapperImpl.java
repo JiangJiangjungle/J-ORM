@@ -2,10 +2,7 @@ package com.jsj.orm.dao;
 
 import com.jsj.orm.BaseMapper;
 import com.jsj.orm.UserDO;
-import com.jsj.orm.map.BasicResultMapHandler;
-import com.jsj.orm.map.DefaultResultMapHandler;
-import com.jsj.orm.map.ResultMap;
-import com.jsj.orm.map.ResultMapHandler;
+import com.jsj.orm.map.*;
 
 import javax.sql.DataSource;
 import java.util.ArrayList;
@@ -24,7 +21,9 @@ public class UserMapperImpl extends BaseMapper implements UserMapper {
 
     private static final String selectName = "select user_name from `tb_user` where id =?";
 
-    private static final String updateUserDO = "update `tb_user` set user_name=? where id =?";
+    private static final String updateName = "update `tb_user` set user_name=? where id =?";
+
+    private static final String updateUserDO = "update `tb_user` set user_name=? , phone=? , balance=? where id =?";
 
     private static final ResultMapHandler<UserDO> resultMapHandler = new DefaultResultMapHandler<>(UserDO.class,
             new ArrayList<ResultMap>() {{
@@ -36,6 +35,15 @@ public class UserMapperImpl extends BaseMapper implements UserMapper {
             }}
     );
 
+    private static final ParamMapHandler<UserDO> paramMapHandler = (userDO1) -> {
+        Object[] params = new Object[4];
+        params[0] = userDO1.getUserName();
+        params[1] = userDO1.getPhone();
+        params[2] = userDO1.getBalance();
+        params[3] = userDO1.getId();
+        return params;
+    };
+
     public UserMapperImpl(DataSource dataSource, boolean autoCommit) {
         super(dataSource, autoCommit);
     }
@@ -46,8 +54,8 @@ public class UserMapperImpl extends BaseMapper implements UserMapper {
     }
 
     @Override
-    public boolean update(String userName, Long id) {
-        return update(updateUserDO, userName, id);
+    public boolean updateName(String userName, Long id) {
+        return update(updateName, userName, id);
     }
 
     @Override
@@ -58,5 +66,10 @@ public class UserMapperImpl extends BaseMapper implements UserMapper {
     @Override
     public void createTableIfNotExists() {
         update(createTable);
+    }
+
+    @Override
+    public boolean update(UserDO userDO) {
+        return update(updateUserDO, paramMapHandler.mapper(userDO));
     }
 }

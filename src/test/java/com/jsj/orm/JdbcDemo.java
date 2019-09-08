@@ -6,6 +6,7 @@ import com.jsj.orm.dao.UserMapperImpl;
 import org.junit.Test;
 
 import javax.sql.DataSource;
+import java.math.BigDecimal;
 import java.util.Properties;
 
 /**
@@ -47,10 +48,24 @@ public class JdbcDemo {
     }
 
     @Test
-    public void update() throws Exception {
+    public void updateOne() throws Exception {
         DataSource dataSource = getDataSource();
         UserMapper userMapper = new UserMapperImpl(dataSource, true);
-        userMapper.update("tom_" + System.currentTimeMillis(), 1L);
+        UserDO userDO = new UserDO();
+        userDO.setId(1L);
+        userDO.setUserName("jsj");
+        userDO.setPhone("12312412");
+        userDO.setBalance(new BigDecimal(666.6));
+        userMapper.update(userDO);
+        System.out.println("---------select-----------");
+        selectOne();
+    }
+
+    @Test
+    public void updateName() throws Exception {
+        DataSource dataSource = getDataSource();
+        UserMapper userMapper = new UserMapperImpl(dataSource, true);
+        userMapper.updateName("tom_" + System.currentTimeMillis(), 1L);
         System.out.println("---------select-----------");
         selectOne();
     }

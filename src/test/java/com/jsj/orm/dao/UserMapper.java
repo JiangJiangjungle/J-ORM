@@ -9,5 +9,7 @@ public interface UserMapper {
 
     String selectName(Long id);
 
-    boolean update(String userName, Long id);
+    boolean updateName(String userName, Long id);
+
+    boolean update(UserDO userDO);
 }

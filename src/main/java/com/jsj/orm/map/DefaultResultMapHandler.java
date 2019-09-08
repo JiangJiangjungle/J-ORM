@@ -8,27 +8,27 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * @param <E>
+ * @param <T>
  * @author jiangshenjie
  */
-public class DefaultResultMapHandler<E> implements ResultMapHandler<E> {
+public class DefaultResultMapHandler<T> implements ResultMapHandler<T> {
     /**
      * 映射对象类型
      */
-    private Class<E> clz;
+    private Class<T> clz;
     /**
      * 映射器
      */
     private List<ResultMap> resultMaps;
 
-    public DefaultResultMapHandler(@NonNull Class<E> clz, @NonNull List<ResultMap> resultMaps) {
+    public DefaultResultMapHandler(@NonNull Class<T> clz, @NonNull List<ResultMap> resultMaps) {
         this.clz = clz;
         this.resultMaps = resultMaps;
     }
 
     @Override
-    public E mapper(@NonNull Map<String, Object> results) throws ResultCastException {
-        E instance;
+    public T mapper(@NonNull Map<String, Object> results) throws ResultCastException {
+        T instance;
         try {
             instance = clz.newInstance();
             for (ResultMap resultMap : resultMaps) {

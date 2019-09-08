@@ -3,17 +3,17 @@ package com.jsj.orm.map;
 import java.util.Map;
 
 /**
- * database数据-> PO的映射
+ * 数据表字段-> PO的映射
  *
- * @param <E>
+ * @param <T>
  * @author jiangshenjie
  */
-public interface ResultMapHandler<E> {
+public interface ResultMapHandler<T> {
     /**
      * 映射处理 key为数据表的字段名，value为字段值
      *
      * @param results
      * @return 返回的映射对象
      */
-    E mapper(Map<String, Object> results);
+    T mapper(Map<String, Object> results);
 }
