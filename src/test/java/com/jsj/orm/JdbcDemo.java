@@ -1,6 +1,7 @@
 package com.jsj.orm;
 
 import com.alibaba.druid.pool.DruidDataSourceFactory;
+import com.jsj.orm.dao.UserMapper;
 import com.jsj.orm.dao.UserMapperImpl;
 import org.junit.Test;
 
@@ -25,14 +26,14 @@ public class JdbcDemo {
     @Test
     public void createTable() throws Exception {
         DataSource dataSource = getDataSource();
-        UserMapperImpl userMapper = new UserMapperImpl(dataSource, true);
+        UserMapper userMapper = new UserMapperImpl(dataSource, true);
         userMapper.createTableIfNotExists();
     }
 
     @Test
     public void selectName() throws Exception {
         DataSource dataSource = getDataSource();
-        UserMapperImpl userMapper = new UserMapperImpl(dataSource, true);
+        UserMapper userMapper = new UserMapperImpl(dataSource, true);
         String userName = userMapper.selectName(1L);
         System.out.println(userName);
     }
@@ -40,7 +41,7 @@ public class JdbcDemo {
     @Test
     public void selectOne() throws Exception {
         DataSource dataSource = getDataSource();
-        UserMapperImpl userMapper = new UserMapperImpl(dataSource, true);
+        UserMapper userMapper = new UserMapperImpl(dataSource, true);
         UserDO userDO = userMapper.selectOne(1L);
         System.out.println(userDO);
     }
@@ -48,7 +49,7 @@ public class JdbcDemo {
     @Test
     public void update() throws Exception {
         DataSource dataSource = getDataSource();
-        UserMapperImpl userMapper = new UserMapperImpl(dataSource, true);
+        UserMapper userMapper = new UserMapperImpl(dataSource, true);
         userMapper.update("tom_" + System.currentTimeMillis(), 1L);
         System.out.println("---------select-----------");
         selectOne();
