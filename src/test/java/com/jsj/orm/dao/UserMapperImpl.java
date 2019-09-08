@@ -1,5 +1,7 @@
-package com.jsj.orm;
+package com.jsj.orm.dao;
 
+import com.jsj.orm.BaseMapper;
+import com.jsj.orm.UserDO;
 import com.jsj.orm.map.BasicResultMapHandler;
 import com.jsj.orm.map.DefaultResultMapHandler;
 import com.jsj.orm.map.ResultMap;
@@ -8,7 +10,7 @@ import com.jsj.orm.map.ResultMapHandler;
 import javax.sql.DataSource;
 import java.util.ArrayList;
 
-public class UserMapper extends BaseMapper {
+public class UserMapperImpl extends BaseMapper implements UserMapper {
     private final String createTable = "CREATE TABLE `tb_user` (\n" +
             "  `id` bigint(20) NOT NULL AUTO_INCREMENT COMMENT 'ID',\n" +
             "  `user_name` varchar(50) NOT NULL COMMENT '用户名',\n" +
@@ -34,26 +36,26 @@ public class UserMapper extends BaseMapper {
             }}
     );
 
-    public UserMapper(DataSource dataSource) {
-        this(dataSource, true);
-    }
-
-    public UserMapper(DataSource dataSource, boolean autoCommit) {
+    public UserMapperImpl(DataSource dataSource, boolean autoCommit) {
         super(dataSource, autoCommit);
     }
 
+    @Override
     public UserDO selectOne(Long id) {
         return selectOne(selectOne, resultMapHandler, id);
     }
 
+    @Override
     public boolean update(String userName, Long id) {
         return update(updateUserDO, userName, id);
     }
 
+    @Override
     public String selectName(Long id) {
-        return selectOne(selectName, new BasicResultMapHandler<>(String.class, "user_name"), id);
+        return selectOne(selectName, new BasicResultMapHandler<>(String.class), id);
     }
 
+    @Override
     public void createTableIfNotExists() {
         update(createTable);
     }

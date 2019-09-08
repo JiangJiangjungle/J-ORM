@@ -1,5 +1,6 @@
 package com.jsj.orm.executor;
 
+import com.jsj.orm.config.Configuration;
 import com.jsj.orm.map.ResultMapHandler;
 
 import java.sql.SQLException;
@@ -44,4 +45,6 @@ public interface Executor {
      * @throws SQLException
      */
     void rollback() throws SQLException;
+
+    Configuration getConfiguration();
 }

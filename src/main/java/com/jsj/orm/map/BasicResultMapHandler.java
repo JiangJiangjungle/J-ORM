@@ -15,16 +15,18 @@ public class BasicResultMapHandler<E> implements ResultMapHandler<E> {
      * 映射对象类型
      */
     private Class<E> clz;
-    private String columnName;
 
-    public BasicResultMapHandler(@NonNull Class<E> clz, @NonNull String columnName) {
+    public BasicResultMapHandler(@NonNull Class<E> clz) {
         this.clz = clz;
-        this.columnName = columnName;
     }
 
     @Override
     public E mapper(Map<String, Object> results) {
-        Object object = results.get(columnName);
-        return clz.cast(object);
+        Object value = null;
+        for (Map.Entry<String, Object> entry : results.entrySet()) {
+            value = entry.getValue();
+            break;
+        }
+        return clz.cast(value);
     }
 }

@@ -1,10 +1,17 @@
 package com.jsj.orm.map;
 
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
 /**
  * 字段映射关系
  *
  * @author jiangshenjie
  */
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
 public class ResultMap {
     /**
      * 数据表中的对应字段名
@@ -14,20 +21,4 @@ public class ResultMap {
      * 映射对象中的字段名
      */
     private String fieldName;
-
-    public ResultMap() {
-    }
-
-    public ResultMap(String columnName, String fieldName) {
-        this.columnName = columnName;
-        this.fieldName = fieldName;
-    }
-
-    public String getFieldName() {
-        return fieldName;
-    }
-
-    public String getColumnName() {
-        return columnName;
-    }
 }

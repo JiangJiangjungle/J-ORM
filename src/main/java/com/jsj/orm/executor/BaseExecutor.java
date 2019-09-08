@@ -1,5 +1,6 @@
 package com.jsj.orm.executor;
 
+import com.jsj.orm.config.Configuration;
 import com.jsj.orm.map.ResultMapHandler;
 import com.jsj.orm.transaction.Transaction;
 
@@ -15,9 +16,11 @@ import java.util.Map;
  * @author jiangshenjie
  */
 public class BaseExecutor implements Executor {
-    private Transaction transaction;
+    protected Configuration configuration;
+    protected Transaction transaction;
 
-    public BaseExecutor(Transaction transaction) {
+    public BaseExecutor(Configuration configuration, Transaction transaction) {
+        this.configuration = configuration;
         this.transaction = transaction;
     }
 
@@ -85,5 +88,10 @@ public class BaseExecutor implements Executor {
         } catch (SQLException e) {
             e.printStackTrace();
         }
+    }
+
+    @Override
+    public Configuration getConfiguration() {
+        return configuration;
     }
 }

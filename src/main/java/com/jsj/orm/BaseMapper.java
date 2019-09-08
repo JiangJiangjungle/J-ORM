@@ -1,5 +1,6 @@
 package com.jsj.orm;
 
+import com.jsj.orm.config.Configuration;
 import com.jsj.orm.exception.MapperClosedException;
 import com.jsj.orm.executor.BaseExecutor;
 import com.jsj.orm.executor.Executor;
@@ -20,11 +21,17 @@ import java.util.List;
 public class BaseMapper implements Mapper {
     private DefaultTransactionFactory transactionFactory = new DefaultTransactionFactory();
     private DataSource dataSource;
+    private Configuration configuration;
     private boolean autoCommit;
     private Executor executor = null;
     private boolean closed = false;
 
     public BaseMapper(DataSource dataSource, boolean autoCommit) {
+        this(new Configuration(), dataSource, autoCommit);
+    }
+
+    public BaseMapper(Configuration configuration, DataSource dataSource, boolean autoCommit) {
+        this.configuration = configuration;
         this.dataSource = dataSource;
         this.autoCommit = autoCommit;
     }
@@ -90,7 +97,7 @@ public class BaseMapper implements Mapper {
         }
         if (executor == null) {
             Transaction transaction = transactionFactory.newTransaction(dataSource, autoCommit);
-            executor = new BaseExecutor(transaction);
+            executor = new BaseExecutor(this.configuration, transaction);
         }
     }
 }
