@@ -11,7 +11,7 @@ import javax.sql.DataSource;
 import java.util.ArrayList;
 
 public class UserMapperImpl extends BaseMapper implements UserMapper {
-    private final String createTable = "CREATE TABLE `tb_user` (\n" +
+    private static final String createTable = "CREATE TABLE `tb_user` (\n" +
             "  `id` bigint(20) NOT NULL AUTO_INCREMENT COMMENT 'ID',\n" +
             "  `user_name` varchar(50) NOT NULL COMMENT '用户名',\n" +
             "  `phone` varchar(20) NOT NULL COMMENT '手机号码',\n" +
@@ -20,13 +20,13 @@ public class UserMapperImpl extends BaseMapper implements UserMapper {
             "  PRIMARY KEY (`id`)\n" +
             ") ENGINE=InnoDB AUTO_INCREMENT=0 DEFAULT CHARSET=utf8;";
 
-    private final String selectOne = "select * from `tb_user` where id =?";
+    private static final String selectOne = "select * from `tb_user` where id =?";
 
-    private final String selectName = "select user_name from `tb_user` where id =?";
+    private static final String selectName = "select user_name from `tb_user` where id =?";
 
-    private final String updateUserDO = "update `tb_user` set user_name=? where id =?";
+    private static final String updateUserDO = "update `tb_user` set user_name=? where id =?";
 
-    private final ResultMapHandler<UserDO> resultMapHandler = new DefaultResultMapHandler<>(UserDO.class,
+    private static final ResultMapHandler<UserDO> resultMapHandler = new DefaultResultMapHandler<>(UserDO.class,
             new ArrayList<ResultMap>() {{
                 add(new ResultMap("id", "id"));
                 add(new ResultMap("user_name", "userName"));
