@@ -37,7 +37,9 @@ public class BaseExecutor implements Executor {
                 for (int i = 1; i <= count; i++) {
                     values.put(data.getColumnName(i), resultSet.getObject(i));
                 }
-                list.add(resultMapHandler.mapper(values));
+                //根据该行返回结果，映射为一个对象后添加到list
+                E object = resultMapHandler.mapper(values);
+                list.add(object);
             }
             return list;
         } finally {
@@ -66,6 +68,19 @@ public class BaseExecutor implements Executor {
         transaction.rollback();
     }
 
+    @Override
+    public Configuration getConfiguration() {
+        return configuration;
+    }
+
+    /**
+     * 根据Connection和 sql， 获取PreparedStatement
+     *
+     * @param sql
+     * @param params
+     * @return
+     * @throws SQLException
+     */
     protected PreparedStatement prepare(String sql, Object... params) throws SQLException {
         Connection connection = transaction.getConnection();
         PreparedStatement statement = connection.prepareStatement(sql);
@@ -73,6 +88,13 @@ public class BaseExecutor implements Executor {
         return statement;
     }
 
+    /**
+     * 参数填充到PreparedStatement
+     *
+     * @param statement PreparedStatement
+     * @param params    参数数组
+     * @throws SQLException
+     */
     protected void setParams(PreparedStatement statement, Object... params) throws SQLException {
         if (params == null) {
             return;
@@ -82,6 +104,11 @@ public class BaseExecutor implements Executor {
         }
     }
 
+    /**
+     * 关闭Statement，释放资源
+     *
+     * @param statement
+     */
     protected void closeStatement(Statement statement) {
         if (statement == null) {
             return;
@@ -93,10 +120,5 @@ public class BaseExecutor implements Executor {
         } catch (SQLException e) {
             e.printStackTrace();
         }
-    }
-
-    @Override
-    public Configuration getConfiguration() {
-        return configuration;
     }
 }

@@ -18,7 +18,7 @@ public class DefaultResultMapHandler<T> implements ResultMapHandler<T> {
      */
     private Class<T> clz;
     /**
-     * 映射器
+     * 字段映射关系
      */
     private List<ResultMap> resultMaps;
 
