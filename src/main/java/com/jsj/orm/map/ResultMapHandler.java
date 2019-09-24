@@ -12,7 +12,7 @@ public interface ResultMapHandler<T> {
     /**
      * 映射处理
      *
-     * @param results 封装类sql响应结果的map：key为数据表的字段名，value为字段值
+     * @param results sql查询结果：key为数据表的字段名，value为字段值
      * @return 返回的映射对象
      */
     T mapper(Map<String, Object> results);

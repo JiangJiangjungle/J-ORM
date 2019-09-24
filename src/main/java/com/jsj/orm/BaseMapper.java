@@ -7,6 +7,7 @@ import com.jsj.orm.executor.Executor;
 import com.jsj.orm.map.ResultMapHandler;
 import com.jsj.orm.transaction.DefaultTransactionFactory;
 import com.jsj.orm.transaction.Transaction;
+import com.jsj.orm.transaction.TransactionFactory;
 
 import javax.sql.DataSource;
 import java.sql.SQLException;
@@ -15,13 +16,12 @@ import java.util.List;
 
 /**
  * 可以直接使用，也可以通过继承BaseMapper进行使用
- * 值得注意的是，BaseMapper是一次性的：
- * 当本次事务提交后，该BaseMapper对象就无法继续使用了。
+ * 由于实际调用了Executor的方法进行操作，所以BaseMapper也是一次性的。
  *
  * @author jiangshenjie
  */
 public class BaseMapper implements Mapper {
-    private DefaultTransactionFactory transactionFactory = new DefaultTransactionFactory();
+    private TransactionFactory transactionFactory = new DefaultTransactionFactory();
     private DataSource dataSource;
     private Configuration configuration;
     private boolean autoCommit;
