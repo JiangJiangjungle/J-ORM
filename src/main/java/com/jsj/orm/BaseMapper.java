@@ -15,6 +15,8 @@ import java.util.List;
 
 /**
  * 可以直接使用，也可以通过继承BaseMapper进行使用
+ * 值得注意的是，BaseMapper是一次性的：
+ * 当本次事务提交后，该BaseMapper对象就无法继续使用了。
  *
  * @author jiangshenjie
  */

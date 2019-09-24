@@ -13,10 +13,10 @@ public interface Executor {
     /**
      * query
      *
-     * @param sql
-     * @param resultMapHandler
-     * @param params
-     * @param <E>
+     * @param sql              sql语句，参数由占位符?表示
+     * @param resultMapHandler sql结果映射器
+     * @param params           参数数组
+     * @param <E>              封装的返回结果
      * @return
      * @throws SQLException
      */
@@ -25,8 +25,8 @@ public interface Executor {
     /**
      * update
      *
-     * @param sql
-     * @param params
+     * @param sql    sql语句，参数由占位符?表示
+     * @param params 参数数组
      * @return
      * @throws SQLException
      */

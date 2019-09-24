@@ -8,6 +8,7 @@ import java.util.List;
 import java.util.Map;
 
 /**
+ * 默认的对象映射器
  * @param <T>
  * @author jiangshenjie
  */

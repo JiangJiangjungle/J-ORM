@@ -35,12 +35,12 @@ public class UserMapperImpl extends BaseMapper implements UserMapper {
             }}
     );
 
-    private static final ParamMapHandler<UserDO> paramMapHandler = (userDO1) -> {
+    private static final ParamMapHandler<UserDO> paramMapHandler = (userDO) -> {
         Object[] params = new Object[4];
-        params[0] = userDO1.getUserName();
-        params[1] = userDO1.getPhone();
-        params[2] = userDO1.getBalance();
-        params[3] = userDO1.getId();
+        params[0] = userDO.getUserName();
+        params[1] = userDO.getPhone();
+        params[2] = userDO.getBalance();
+        params[3] = userDO.getId();
         return params;
     };
 

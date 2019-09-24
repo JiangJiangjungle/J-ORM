@@ -11,7 +11,7 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * 每次调用都会新建一个Executor，即Executor是一次性的
+ * 每个新事务都会新建一个Executor，即Executor是一次性的
  *
  * @author jiangshenjie
  */
@@ -74,13 +74,18 @@ public class BaseExecutor implements Executor {
     }
 
     protected void setParams(PreparedStatement statement, Object... params) throws SQLException {
+        if (params == null) {
+            return;
+        }
         for (int i = 1; i <= params.length; i++) {
             statement.setObject(i, params[i - 1]);
         }
     }
 
     protected void closeStatement(Statement statement) {
-        if (statement == null) return;
+        if (statement == null) {
+            return;
+        }
         try {
             if (!statement.isClosed()) {
                 statement.close();

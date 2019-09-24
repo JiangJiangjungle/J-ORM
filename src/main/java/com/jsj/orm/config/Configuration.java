@@ -18,6 +18,10 @@ public class Configuration {
      */
     private Map<String, MapperInfo> mapperInfoMap;
 
+    /**
+     * @param mapperInterface
+     * @return
+     */
     public MapperInfo getMapperInfo(Class<?> mapperInterface) {
         return mapperInfoMap.get(mapperInterface.getName());
     }
