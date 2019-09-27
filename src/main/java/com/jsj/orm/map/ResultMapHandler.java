@@ -1,5 +1,7 @@
 package com.jsj.orm.map;
 
+import com.jsj.orm.exception.ResultCastException;
+
 import java.util.Map;
 
 /**
@@ -14,6 +16,7 @@ public interface ResultMapHandler<T> {
      *
      * @param results sql查询结果：key为数据表的字段名，value为字段值
      * @return 返回的映射对象
+     * @throws ResultCastException
      */
-    T mapper(Map<String, Object> results);
+    T mapper(Map<String, Object> results) throws ResultCastException;
 }

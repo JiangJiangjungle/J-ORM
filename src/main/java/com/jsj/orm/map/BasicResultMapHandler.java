@@ -1,5 +1,6 @@
 package com.jsj.orm.map;
 
+import com.jsj.orm.exception.ResultCastException;
 import lombok.NonNull;
 
 import java.util.Map;
@@ -21,12 +22,13 @@ public class BasicResultMapHandler<T> implements ResultMapHandler<T> {
     }
 
     @Override
-    public T mapper(Map<String, Object> results) {
+    public T mapper(@NonNull Map<String, Object> results)  throws ResultCastException {
         Object value = null;
         for (Map.Entry<String, Object> entry : results.entrySet()) {
             value = entry.getValue();
             break;
         }
+        //类型强转
         return clz.cast(value);
     }
 }

@@ -1,8 +1,10 @@
-package com.jsj.orm.executor;
+package com.jsj.orm;
 
-import com.jsj.orm.config.Configuration;
-import com.jsj.orm.map.ResultMapHandler;
 import com.jsj.orm.transaction.Transaction;
+import com.jsj.orm.config.Configuration;
+import com.jsj.orm.exception.TransactionClosedException;
+import com.jsj.orm.map.ResultMapHandler;
+import lombok.NonNull;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -19,13 +21,14 @@ public class BaseExecutor implements Executor {
     protected Configuration configuration;
     protected Transaction transaction;
 
-    public BaseExecutor(Configuration configuration, Transaction transaction) {
+    public BaseExecutor(@NonNull Configuration configuration, @NonNull Transaction transaction) {
         this.configuration = configuration;
         this.transaction = transaction;
     }
 
     @Override
     public <E> List<E> query(String sql, ResultMapHandler<E> resultMapHandler, Object... params) throws SQLException {
+        checkTransactionIfClosed();
         PreparedStatement statement = null;
         try {
             statement = prepare(sql, params);
@@ -49,6 +52,7 @@ public class BaseExecutor implements Executor {
 
     @Override
     public boolean update(String sql, Object... params) throws SQLException {
+        checkTransactionIfClosed();
         PreparedStatement statement = null;
         try {
             statement = prepare(sql, params);
@@ -105,7 +109,7 @@ public class BaseExecutor implements Executor {
     }
 
     /**
-     * 关闭Statement，释放资源
+     * 释放statement资源
      *
      * @param statement
      */
@@ -119,6 +123,17 @@ public class BaseExecutor implements Executor {
             }
         } catch (SQLException e) {
             e.printStackTrace();
+        }
+    }
+
+    /**
+     * 检查事务是否已经关闭，事务关闭后不可再做任何操作
+     *
+     * @throws SQLException
+     */
+    protected void checkTransactionIfClosed() throws SQLException {
+        if (transaction.isClosed()) {
+            throw new TransactionClosedException("Transaction is closed!");
         }
     }
 }

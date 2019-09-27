@@ -1,9 +1,6 @@
 package com.jsj.orm;
 
 import com.jsj.orm.config.Configuration;
-import com.jsj.orm.exception.MapperClosedException;
-import com.jsj.orm.executor.BaseExecutor;
-import com.jsj.orm.executor.Executor;
 import com.jsj.orm.map.ResultMapHandler;
 import com.jsj.orm.transaction.DefaultTransactionFactory;
 import com.jsj.orm.transaction.Transaction;
@@ -26,7 +23,6 @@ public class BaseMapper implements Mapper {
     private Configuration configuration;
     private boolean autoCommit;
     private Executor executor = null;
-    private boolean closed = false;
 
     public BaseMapper(DataSource dataSource, boolean autoCommit) {
         this(new Configuration(), dataSource, autoCommit);
@@ -40,13 +36,15 @@ public class BaseMapper implements Mapper {
 
     @Override
     public <E> List<E> selectList(String sql, ResultMapHandler<E> resultMapHandler, Object... params) {
-        checkExecutor();
-        try {
-            return executor.query(sql, resultMapHandler, params);
-        } catch (SQLException s) {
-            s.printStackTrace();
+        List<E> results = new ArrayList<>(0);
+        if (isExecutorCreated(true)) {
+            try {
+                results = executor.query(sql, resultMapHandler, params);
+            } catch (SQLException s) {
+                s.printStackTrace();
+            }
         }
-        return new ArrayList<>(0);
+        return results;
     }
 
     @Override
@@ -57,49 +55,50 @@ public class BaseMapper implements Mapper {
 
     @Override
     public boolean update(String sql, Object... params) {
-        checkExecutor();
         boolean updated = false;
-        try {
-            updated = executor.update(sql, params);
-        } catch (SQLException s) {
-            s.printStackTrace();
+        if (isExecutorCreated(true)) {
+            try {
+                updated = executor.update(sql, params);
+            } catch (SQLException s) {
+                s.printStackTrace();
+            }
         }
         return updated;
     }
 
     @Override
     public void commit() {
-        if (executor == null) {
-            return;
-        }
-        try {
-            executor.commit();
-        } catch (SQLException s) {
-        } finally {
-            closed = true;
+        if (isExecutorCreated(false)) {
+            try {
+                executor.commit();
+            } catch (SQLException s) {
+                s.printStackTrace();
+            }
         }
     }
 
     @Override
     public void rollback() {
-        if (executor == null) {
-            return;
-        }
-        try {
-            executor.rollback();
-        } catch (SQLException s) {
-        } finally {
-            closed = true;
+        if (isExecutorCreated(false)) {
+            try {
+                executor.rollback();
+            } catch (SQLException s) {
+                s.printStackTrace();
+            }
         }
     }
 
-    private void checkExecutor() {
-        if (closed) {
-            throw new MapperClosedException("This Mapper has been closed!");
-        }
-        if (executor == null) {
+    /**
+     * 检查executor是否已经被创建
+     *
+     * @param createIfNotExisted 是否创建executor
+     * @return
+     */
+    private boolean isExecutorCreated(boolean createIfNotExisted) {
+        if (executor == null && createIfNotExisted) {
             Transaction transaction = transactionFactory.newTransaction(dataSource, autoCommit);
             executor = new BaseExecutor(this.configuration, transaction);
         }
+        return executor != null;
     }
 }

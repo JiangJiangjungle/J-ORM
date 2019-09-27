@@ -1,8 +1,8 @@
 package com.jsj.orm.dao;
 
 import com.jsj.orm.BaseMapper;
-import com.jsj.orm.UserDO;
 import com.jsj.orm.map.*;
+import com.jsj.orm.UserDO;
 
 import javax.sql.DataSource;
 import java.util.ArrayList;

@@ -5,6 +5,9 @@ import lombok.NoArgsConstructor;
 
 
 /**
+ * 配置项
+ * todo
+ *
  * @author jiangshenjie
  */
 @Data

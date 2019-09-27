@@ -15,6 +15,7 @@ public class JdbcTransaction implements Transaction {
     private DataSource dataSource;
     private boolean autoCommit;
     private Connection connection;
+    private boolean closed;
 
     public JdbcTransaction(DataSource dataSource, boolean autoCommit) {
         this.dataSource = dataSource;
@@ -36,6 +37,7 @@ public class JdbcTransaction implements Transaction {
                 log.debug("Committing JDBC Connection [" + connection + "]");
             }
             connection.commit();
+            closed =true;
         }
     }
 
@@ -46,6 +48,7 @@ public class JdbcTransaction implements Transaction {
                 log.debug("Rolling back JDBC Connection [" + connection + "]");
             }
             connection.rollback();
+            closed =true;
         }
     }
 
@@ -57,7 +60,13 @@ public class JdbcTransaction implements Transaction {
                 log.debug("Closing JDBC Connection [" + connection + "]");
             }
             connection.close();
+            closed =true;
         }
+    }
+
+    @Override
+    public boolean isClosed() throws SQLException {
+        return closed || connection.isClosed();
     }
 
     protected void setDesiredAutoCommit(boolean desiredAutoCommit) {

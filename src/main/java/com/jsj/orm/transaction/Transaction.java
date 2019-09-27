@@ -37,4 +37,11 @@ public interface Transaction {
      * @throws SQLException
      */
     void close() throws SQLException;
+
+    /**
+     * Check connection if closed.
+     * @return
+     * @throws SQLException
+     */
+    boolean isClosed() throws SQLException;
 }

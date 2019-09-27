@@ -1,4 +1,4 @@
-package com.jsj.orm.executor;
+package com.jsj.orm;
 
 import com.jsj.orm.config.Configuration;
 import com.jsj.orm.map.ResultMapHandler;
@@ -46,5 +46,10 @@ public interface Executor {
      */
     void rollback() throws SQLException;
 
+    /**
+     * 获取配置项
+     *
+     * @return
+     */
     Configuration getConfiguration();
 }
