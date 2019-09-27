@@ -18,19 +18,20 @@ import java.util.List;
  * @author jiangshenjie
  */
 public class BaseMapper implements Mapper {
-    private TransactionFactory transactionFactory = new DefaultTransactionFactory();
+    private TransactionFactory transactionFactory;
     private DataSource dataSource;
     private Configuration configuration;
     private boolean autoCommit;
     private Executor executor = null;
 
     public BaseMapper(DataSource dataSource, boolean autoCommit) {
-        this(new Configuration(), dataSource, autoCommit);
+        this(new Configuration(), dataSource, new DefaultTransactionFactory(), autoCommit);
     }
 
-    public BaseMapper(Configuration configuration, DataSource dataSource, boolean autoCommit) {
-        this.configuration = configuration;
+    public BaseMapper(Configuration configuration, DataSource dataSource, TransactionFactory transactionFactory, boolean autoCommit) {
+        this.transactionFactory = transactionFactory;
         this.dataSource = dataSource;
+        this.configuration = configuration;
         this.autoCommit = autoCommit;
     }
 

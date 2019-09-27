@@ -37,7 +37,7 @@ public class JdbcTransaction implements Transaction {
                 log.debug("Committing JDBC Connection [" + connection + "]");
             }
             connection.commit();
-            closed =true;
+            closed = true;
         }
     }
 
@@ -48,7 +48,7 @@ public class JdbcTransaction implements Transaction {
                 log.debug("Rolling back JDBC Connection [" + connection + "]");
             }
             connection.rollback();
-            closed =true;
+            closed = true;
         }
     }
 
@@ -60,13 +60,17 @@ public class JdbcTransaction implements Transaction {
                 log.debug("Closing JDBC Connection [" + connection + "]");
             }
             connection.close();
-            closed =true;
+            closed = true;
         }
     }
 
     @Override
     public boolean isClosed() throws SQLException {
-        return closed || connection.isClosed();
+        boolean closed = this.closed;
+        if (!closed && this.connection != null) {
+            closed = this.connection.isClosed();
+        }
+        return closed;
     }
 
     protected void setDesiredAutoCommit(boolean desiredAutoCommit) {
