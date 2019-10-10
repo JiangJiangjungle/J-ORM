@@ -1,5 +1,7 @@
 # J-ORM
-简洁版ORM框架：提供自定义映射：）
+一个简单ORM框架：
+* 提供自定义参数和结构映射；
+* 多种使用方式
 
 ### 主要接口
 
@@ -84,11 +86,11 @@
 
 ### 使用方法
 
-* 继承BaseMapper（参考示例中的UserMapper）
 * 直接调用BaseMapper方法
-* 基于Java Config的动态代理生成
+* 继承BaseMapper（参考示例中的UserMapperImpl）
+* 基于Java Config和动态代理生成Mapper
 
-### 简单示例
+### 简单使用示例
 
     @Test
     public void selectName() throws Exception {
@@ -127,6 +129,86 @@
         userMapper.updateName("tom_" + System.currentTimeMillis(), 1L);
         System.out.println("---------select-----------");
         selectOne();
+    }
+
+### 基于Java Config和动态代理生成Mapper
+
+    private Configuration newConfiguration() throws Exception {
+        Configuration configuration = new Configuration();
+        //注册结果映射器
+        String id = "0";
+        String className = "com.jsj.orm.UserDO";
+        MultiResultMap multiResultMap = new MultiResultMap();
+        multiResultMap.setId(id);
+        multiResultMap.setClassName(className);
+        multiResultMap.addResultMap("id", "id");
+        multiResultMap.addResultMap("user_name", "userName");
+        multiResultMap.addResultMap("phone", "phone");
+        multiResultMap.addResultMap("balance", "balance");
+        multiResultMap.addResultMap("create_time", "createTime");
+        configuration.registerResultMapHandler(multiResultMap);
+
+        //注册参数映射器
+        MultiParamMap multiParamMap = new MultiParamMap();
+        multiParamMap.setId(id);
+        multiParamMap.setClassName(className);
+        multiParamMap.addParam(0, "userName");
+        multiParamMap.addParam(1, "phone");
+        multiParamMap.addParam(2, "balance");
+        multiParamMap.addParam(3, "id");
+        configuration.registerParamMapHandler(multiParamMap);
+
+        //注册selectOne方法
+        MethodDefinition methodDefinition = new MethodDefinition();
+        methodDefinition.setInterfaceName("com.jsj.orm.dao.UserMapper");
+        methodDefinition.setExecuteType(ExecuteType.SELECT_ONE);
+        methodDefinition.setHandlerId(id);
+        methodDefinition.setSql("select * from `tb_user` where id =?");
+        methodDefinition.setMethodName("selectOne");
+        methodDefinition.setParameterTypes(new String[]{"java.lang.Long"});
+        configuration.registerMethod(methodDefinition.getMethod(), methodDefinition);
+
+        //注册selectName方法
+        methodDefinition = new MethodDefinition();
+        methodDefinition.setInterfaceName("com.jsj.orm.dao.UserMapper");
+        methodDefinition.setExecuteType(ExecuteType.SELECT_ONE);
+        methodDefinition.setHandlerId("String");
+        methodDefinition.setSql("select user_name from `tb_user` where id =?");
+        methodDefinition.setMethodName("selectName");
+        methodDefinition.setParameterTypes(new String[]{"java.lang.Long"});
+        configuration.registerMethod(methodDefinition.getMethod(), methodDefinition);
+
+        //注册updateName方法
+        methodDefinition = new MethodDefinition();
+        methodDefinition.setInterfaceName("com.jsj.orm.dao.UserMapper");
+        methodDefinition.setExecuteType(ExecuteType.UPDATE);
+        methodDefinition.setSql("update `tb_user` set user_name=? where id =?");
+        methodDefinition.setMethodName("updateName");
+        methodDefinition.setParameterTypes(new String[]{"java.lang.String", "java.lang.Long"});
+        configuration.registerMethod(methodDefinition.getMethod(), methodDefinition);
+
+        //注册update方法
+        methodDefinition = new MethodDefinition();
+        methodDefinition.setExecuteType(ExecuteType.UPDATE);
+        methodDefinition.setHandlerId(id);
+        methodDefinition.setSql("update `tb_user` set user_name=? , phone=? , balance=? where id =?");
+        methodDefinition.setInterfaceName("com.jsj.orm.dao.UserMapper");
+        methodDefinition.setMethodName("update");
+        methodDefinition.setParameterTypes(new String[]{"com.jsj.orm.UserDO"});
+        configuration.registerMethod(methodDefinition.getMethod(), methodDefinition);
+
+        return configuration;
+    }
+
+    private MapperProxyFactory getMapperProxyFactory(Configuration configuration, DataSource dataSource) {
+        return new MapperProxyFactory(configuration, dataSource);
+    }
+
+    private UserMapper getUserMapper() throws Exception {
+        DataSource dataSource = getDataSource();
+        Configuration configuration = newConfiguration();
+        MapperProxyFactory mapperProxyFactory = getMapperProxyFactory(configuration, dataSource);
+        return mapperProxyFactory.getMapper(UserMapper.class);
     }
 
 

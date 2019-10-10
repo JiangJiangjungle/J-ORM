@@ -1,12 +1,14 @@
 package com.jsj.orm.config;
 
-import com.jsj.orm.binding.MethodInfo;
+import com.alibaba.druid.sql.visitor.functions.Char;
+import com.jsj.orm.binding.MethodDefinition;
 import com.jsj.orm.map.*;
-import lombok.NoArgsConstructor;
 import lombok.NonNull;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
+import java.math.BigDecimal;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
@@ -17,22 +19,25 @@ import java.util.concurrent.ConcurrentHashMap;
  *
  * @author jiangshenjie
  */
-@NoArgsConstructor
 public class Configuration {
-    private Map<Method, MethodInfo> methodInfos = new ConcurrentHashMap<>(64);
+    private Map<Method, MethodDefinition> methodInfos = new ConcurrentHashMap<>(64);
 
     private Map<String, ResultMapHandler> resultMapHandlers = new ConcurrentHashMap<>(64);
 
     private Map<String, ParamMapHandler> paramMapHandlers = new ConcurrentHashMap<>(64);
 
+    public Configuration() {
+        init();
+    }
+
     /**
      * 注册方法
      *
      * @param method
-     * @param methodInfo
+     * @param methodDefinition
      */
-    public void registerMethod(@NonNull Method method, @NonNull MethodInfo methodInfo) {
-        methodInfos.put(method, methodInfo);
+    public void registerMethod(@NonNull Method method, @NonNull MethodDefinition methodDefinition) {
+        methodInfos.put(method, methodDefinition);
     }
 
     /**
@@ -91,7 +96,21 @@ public class Configuration {
         return resultMapHandlers.get(id);
     }
 
-    public MethodInfo getMethodInfo(@NonNull Method method) {
+    public MethodDefinition getMethodInfo(@NonNull Method method) {
         return methodInfos.get(method);
+    }
+
+    public void init() {
+        resultMapHandlers.put("String", new BasicResultMapHandler<>(String.class));
+        resultMapHandlers.put("Boolean", new BasicResultMapHandler<>(Boolean.class));
+        resultMapHandlers.put("Integer", new BasicResultMapHandler<>(Integer.class));
+        resultMapHandlers.put("Long", new BasicResultMapHandler<>(Long.class));
+        resultMapHandlers.put("Double", new BasicResultMapHandler<>(Double.class));
+        resultMapHandlers.put("Short", new BasicResultMapHandler<>(Short.class));
+        resultMapHandlers.put("Byte", new BasicResultMapHandler<>(Byte.class));
+        resultMapHandlers.put("Char", new BasicResultMapHandler<>(Char.class));
+        resultMapHandlers.put("Float", new BasicResultMapHandler<>(Float.class));
+        resultMapHandlers.put("BigDecimal", new BasicResultMapHandler<>(BigDecimal.class));
+        resultMapHandlers.put("Date", new BasicResultMapHandler<>(Date.class));
     }
 }

@@ -1,19 +1,12 @@
 package com.jsj.orm;
 
 import com.alibaba.druid.pool.DruidDataSourceFactory;
-import com.jsj.orm.binding.MapperProxyFactory;
-import com.jsj.orm.binding.MethodInfo;
-import com.jsj.orm.config.Configuration;
 import com.jsj.orm.dao.UserMapper;
 import com.jsj.orm.dao.UserMapperImpl;
-import com.jsj.orm.map.MultiResultMap;
 import org.junit.Test;
 
 import javax.sql.DataSource;
-import java.lang.reflect.Method;
 import java.math.BigDecimal;
-import java.util.HashMap;
-import java.util.Map;
 import java.util.Properties;
 
 /**

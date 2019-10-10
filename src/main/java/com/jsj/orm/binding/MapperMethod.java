@@ -15,14 +15,14 @@ import java.lang.reflect.Method;
  * @author jiangshenjie
  */
 public class MapperMethod {
-    private MethodInfo methodInfo;
+    private MethodDefinition methodDefinition;
     private Method method;
     private Configuration configuration;
 
     public MapperMethod(Configuration configuration, Method method) {
         this.configuration = configuration;
         this.method = method;
-        this.methodInfo = configuration.getMethodInfo(method);
+        this.methodDefinition = configuration.getMethodInfo(method);
     }
 
     /**
@@ -31,12 +31,12 @@ public class MapperMethod {
      * @return
      */
     public Object execute(Mapper mapper, Object[] args) {
-        if (methodInfo == null) {
-            throw new MethodInfoNotFoundException("MethodInfo: " + method.getName() + " not found!");
+        if (methodDefinition == null) {
+            throw new MethodInfoNotFoundException("MethodDefinition: " + method.getName() + " not found!");
         }
-        ExecuteType executeType = methodInfo.getExecuteType();
-        String sql = methodInfo.getSql();
-        String handlerId = methodInfo.getHandlerId();
+        ExecuteType executeType = methodDefinition.getExecuteType();
+        String sql = methodDefinition.getSql();
+        String handlerId = methodDefinition.getHandlerId();
         Object result = null;
         if (ExecuteType.SELECT_ONE == executeType || ExecuteType.SELECT_LIST == executeType) {
             ResultMapHandler resultMapHandler = handlerId == null ? null : configuration.getResultMapHandler(handlerId);

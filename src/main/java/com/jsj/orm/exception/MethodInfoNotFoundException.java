@@ -1,6 +1,11 @@
 package com.jsj.orm.exception;
 
-public class MethodInfoNotFoundException extends RuntimeException{
+/**
+ * 注册方法查找失败后调用此异常
+ *
+ * @author jiangshenjie
+ */
+public class MethodInfoNotFoundException extends RuntimeException {
     public MethodInfoNotFoundException() {
     }
 

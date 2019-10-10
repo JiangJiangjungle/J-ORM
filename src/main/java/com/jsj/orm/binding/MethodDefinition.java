@@ -3,11 +3,13 @@ package com.jsj.orm.binding;
 import com.jsj.orm.ExecuteType;
 import lombok.Data;
 
+import java.lang.reflect.Method;
+
 /**
  * @author jiangshenjie
  */
 @Data
-public class MethodInfo {
+public class MethodDefinition {
     /**
      * sql操作类型
      */
@@ -32,4 +34,13 @@ public class MethodInfo {
      * 参数类型列表
      */
     private String[] parameterTypes = null;
+
+    public Method getMethod() throws ClassNotFoundException, NoSuchMethodException {
+        Class interfaceClass = Class.forName(interfaceName);
+        Class[] paramTypes = new Class[parameterTypes.length];
+        for (int i = 0; i < paramTypes.length; i++) {
+            paramTypes[i] = Class.forName(parameterTypes[i]);
+        }
+        return interfaceClass.getDeclaredMethod(getMethodName(), paramTypes);
+    }
 }
