@@ -86,8 +86,9 @@
 
 * 继承BaseMapper（参考示例中的UserMapper）
 * 直接调用BaseMapper方法
+* 基于Java Config的动态代理生成
 
-### 示例
+### 简单示例
 
     @Test
     public void selectName() throws Exception {
