@@ -21,6 +21,9 @@ public class BaseMapper implements Mapper {
     private TransactionFactory transactionFactory;
     private DataSource dataSource;
     private Configuration configuration;
+    /**
+     * 是否自动提交事务
+     */
     private boolean autoCommit;
     private Executor executor = null;
 

@@ -44,8 +44,8 @@ public class UserMapperImpl extends BaseMapper implements UserMapper {
         return params;
     };
 
-    public UserMapperImpl(DataSource dataSource, boolean autoCommit) {
-        super(dataSource, autoCommit);
+    public UserMapperImpl(DataSource dataSource) {
+        super(dataSource, true);
     }
 
     @Override

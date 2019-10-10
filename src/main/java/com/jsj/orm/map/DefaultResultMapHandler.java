@@ -9,6 +9,7 @@ import java.util.Map;
 
 /**
  * 默认的对象映射器
+ *
  * @param <T>
  * @author jiangshenjie
  */
@@ -33,13 +34,14 @@ public class DefaultResultMapHandler<T> implements ResultMapHandler<T> {
         try {
             instance = clz.newInstance();
             for (ResultMap resultMap : resultMaps) {
-                String fieldName = resultMap.getFieldName();
-                Field field = clz.getDeclaredField(fieldName);
+                String objectFieldName = resultMap.getObjectFieldName();
+                //可能存在反射的性能问题
+                Field field = clz.getDeclaredField(objectFieldName);
                 if (field == null) {
-                    throw new ResultCastException(String.format("No such field [%s] !", fieldName));
+                    throw new ResultCastException(String.format("No such field [%s] !", objectFieldName));
                 }
                 field.setAccessible(true);
-                Object fieldValue = results.get(resultMap.getColumnName());
+                Object fieldValue = results.get(resultMap.getTableColumnName());
                 field.set(instance, fieldValue);
             }
         } catch (Exception e) {

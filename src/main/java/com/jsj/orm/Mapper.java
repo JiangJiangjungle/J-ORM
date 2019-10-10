@@ -15,10 +15,10 @@ public interface Mapper {
      * @param sql
      * @param resultMapHandler
      * @param params
-     * @param <E>
+     * @param <T>
      * @return one result or ull
      */
-    <E> E selectOne(String sql, ResultMapHandler<E> resultMapHandler, Object... params);
+    <T> T selectOne(String sql, ResultMapHandler<T> resultMapHandler, Object... params);
 
     /**
      * select multi result
@@ -26,10 +26,10 @@ public interface Mapper {
      * @param sql
      * @param resultMapHandler
      * @param params
-     * @param <E>
+     * @param <T>
      * @return
      */
-    <E> List<E> selectList(String sql, ResultMapHandler<E> resultMapHandler, Object... params);
+    <T> List<T> selectList(String sql, ResultMapHandler<T> resultMapHandler, Object... params);
 
     /**
      * update

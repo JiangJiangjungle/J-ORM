@@ -15,6 +15,10 @@ public class JdbcTransaction implements Transaction {
     private DataSource dataSource;
     private boolean autoCommit;
     private Connection connection;
+    /**
+     * 事务处于是否关闭状态：
+     * 当显式调用commit，rollback和close方法后事务关闭。
+     */
     private boolean closed;
 
     public JdbcTransaction(DataSource dataSource, boolean autoCommit) {

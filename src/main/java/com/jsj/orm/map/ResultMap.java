@@ -16,9 +16,9 @@ public class ResultMap {
     /**
      * 数据表中的对应字段名
      */
-    private String columnName;
+    private String tableColumnName;
     /**
      * 映射对象中的字段名
      */
-    private String fieldName;
+    private String objectFieldName;
 }
