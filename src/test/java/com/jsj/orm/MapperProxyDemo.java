@@ -40,7 +40,6 @@ public class MapperProxyDemo {
         multiResultMap.addResultMap("id", "id");
         multiResultMap.addResultMap("user_name", "userName");
         multiResultMap.addResultMap("phone", "phone");
-        multiResultMap.addResultMap("phone", "phone");
         multiResultMap.addResultMap("balance", "balance");
         multiResultMap.addResultMap("create_time", "createTime");
         configuration.registerResultMapHandler(multiResultMap);
@@ -54,7 +53,6 @@ public class MapperProxyDemo {
         multiParamMap.addParam(2, "balance");
         multiParamMap.addParam(3, "id");
         configuration.registerParamMapHandler(multiParamMap);
-
 
         //注册selectOne方法
         MethodInfo methodInfo = new MethodInfo();
